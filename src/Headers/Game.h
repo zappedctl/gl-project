@@ -2,16 +2,14 @@
 #define GAME_H
 
 #include "../Headers.h"
+#include "Shader.h"
 
 class Game
 {
   private:
     GLFWwindow* window;
 
-    // Shaders
-    unsigned int shaderProgram;
-    unsigned int vertexShader;
-    unsigned int fragmentShader;
+    Shader* mainShader;
 
     // OpenGL Objects
     unsigned int VBO;
@@ -21,6 +19,7 @@ class Game
     // Initializers
     void initWindow();
     void initCallbacks();
+    void initShaders();
     void initObjects();
 
   public:

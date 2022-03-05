@@ -8,6 +8,10 @@
 #include <GLFW/glfw3.h>
 
 // Other
+#include <string>
+#include <fstream>
+#include <sstream>
 #include <iostream>
+#include <cerrno>
 
 #endif // HEADERS_H
