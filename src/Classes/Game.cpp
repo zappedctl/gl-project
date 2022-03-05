@@ -1,5 +1,9 @@
 #include "../Headers/Game.h"
 
+// Callback Declarations
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 // Initializers
 
 void Game::initWindow()
@@ -39,11 +43,17 @@ void Game::initWindow()
   }
 }
 
+void Game::initCallbacks()
+{
+  glfwSetKeyCallback(this->window, keyCallback);
+}
+
 // Constructor and Destructor
 
 Game::Game()
 {
   this->initWindow();
+  this->initCallbacks();
 }
 
 Game::~Game()
@@ -66,5 +76,15 @@ void Game::run()
   {
     this->render();
     glfwPollEvents();
+  }
+}
+
+// Callback Definitions
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+  if (key == GLFW_KEY_A)
+  {
+    std::cout << "You've pressed key A!" << std::endl;
   }
 }

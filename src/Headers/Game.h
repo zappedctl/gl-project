@@ -10,6 +10,7 @@ class Game
 
     // Initializers
     void initWindow();
+    void initCallbacks();
 
   public:
     // Constructor and Destructor
