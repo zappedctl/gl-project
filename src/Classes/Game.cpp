@@ -1,4 +1,5 @@
 #include "../Headers/Game.h"
+#include "../Constants.h"
 
 // Callback Declarations
 
@@ -21,10 +22,10 @@ void Game::initWindow()
 
   // Create a GLFW Window
   this->window = glfwCreateWindow(
-    800,
-    600,
-    "GLFW",
-    NULL,
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
+    WINDOW_TITLE,
+    WINDOW_FULLSCREEN ? glfwGetPrimaryMonitor() : NULL,
     NULL
   );
 
@@ -85,13 +86,11 @@ void Game::run()
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-  if (key == GLFW_KEY_A)
-  {
-    std::cout << "You've pressed key A!" << std::endl;
-  }
+
 }
 
 void cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 {
-  std::cout << xPos << ", " << yPos << std::endl;
+
 }
+
