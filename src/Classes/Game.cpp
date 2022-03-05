@@ -3,6 +3,7 @@
 // Callback Declarations
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void cursorPosCallback(GLFWwindow* window, double xPos, double yPos);
 
 // Initializers
 
@@ -46,6 +47,7 @@ void Game::initWindow()
 void Game::initCallbacks()
 {
   glfwSetKeyCallback(this->window, keyCallback);
+  glfwSetCursorPosCallback(this->window, cursorPosCallback);
 }
 
 // Constructor and Destructor
@@ -87,4 +89,9 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
   {
     std::cout << "You've pressed key A!" << std::endl;
   }
+}
+
+void cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
+{
+  std::cout << xPos << ", " << yPos << std::endl;
 }
