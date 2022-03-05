@@ -14,8 +14,9 @@ class Game
     unsigned int fragmentShader;
 
     // OpenGL Objects
-    unsigned int VAO;
     unsigned int VBO;
+    unsigned int EBO;
+    unsigned int VAO;
 
     // Initializers
     void initWindow();

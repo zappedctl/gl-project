@@ -76,9 +76,15 @@ void Game::initCallbacks()
 void Game::initObjects()
 {
   float vertices[] = {
-    -0.5f, -0.5f, 0.f,
-    0.5f, -0.5f, 0.f,
-    0.f, 0.5f, 0.f
+    -0.5f, 0.5f, 0.f,  // Top Left
+    0.5f, 0.5f, 0.f,   // Top Right
+    -0.5f, -0.5f, 0.f, // Bottom Left
+    0.5f, -0.5f, 0.f   // Bottom Right
+  };
+
+  unsigned int indices[] = {
+    0, 1, 2,
+    1, 2, 3
   };
 
   this->vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -89,14 +95,18 @@ void Game::initObjects()
   glShaderSource(this->fragmentShader, 1, &fragmentShaderSource, NULL);
   glCompileShader(this->fragmentShader);
 
-  glGenBuffers(1, &this->VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
   glGenVertexArrays(1, &this->VAO);
+  glGenBuffers(1, &this->VBO);
+  glGenBuffers(1, &this->EBO);
+
   glBindVertexArray(this->VAO);
   glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
 
   this->shaderProgram = glCreateProgram();
   glAttachShader(shaderProgram, this->vertexShader);
@@ -107,8 +117,10 @@ void Game::initObjects()
   glDeleteShader(this->vertexShader);
   glDeleteShader(this->fragmentShader);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
+
+  // Unbinding
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 }
 
 // Construtor and Destructor
@@ -134,7 +146,7 @@ void Game::render()
 
   glUseProgram(this->shaderProgram);
   glBindVertexArray(this->VAO);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
   glfwSwapBuffers(this->window);
 }
