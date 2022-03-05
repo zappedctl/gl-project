@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PROJECT_NAME="gl"
 LIBRARIES="-lGL -lGLU -lglfw -lGLEW -lX11 -lXxf86vm -lXrandr -lpthread -lXi"
 
@@ -6,8 +8,8 @@ then
   echo "Compiling..."
   mkdir -p build
   rm -f build/*
-  g++ -c src/Main.cpp --std=c++11
-  g++ *.o -o build/$PROJECT_NAME $LIBRARIES
+  g++ -c src/Main.cpp src/Classes/*.cpp --std=c++11
+  g++ *.o -o build/$PROJECT_NAME -I src/Headers $LIBRARIES
   rm *.o
 elif [[ $1 == "comph" ]]
 then
