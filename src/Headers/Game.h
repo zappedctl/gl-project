@@ -8,6 +8,13 @@ class Game
   private:
     GLFWwindow* window;
 
+    // Shaders
+    unsigned int shaderProgram;
+    unsigned int vertexShader;
+    unsigned int fragmentShader;
+
+    // OpenGL Objects
+    unsigned int VAO;
     unsigned int VBO;
 
     // Initializers

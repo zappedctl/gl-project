@@ -8,16 +8,15 @@ const char* vertexShaderSource =
   "layout (location = 0) in vec3 aPos;\n"
   "void main()\n"
   "{\n"
-  " gl_Position = vec3(aPos.x, aPos.y, aPos.z, 1.0f);\n"
+  " gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
   "}\0";
 
 const char* fragmentShaderSource =
   "#version 330 core\n"
-  "layout (location = 0) in vec3 aPos;\n"
   "out vec4 fColor;\n"
   "void main()\n"
   "{\n"
-  " fColor = vec4(1.f, 0.f, 0.f, 1,0f);\n"
+  " fColor = vec4(1.f, 0.f, 0.f, 1.0f);\n"
   "}\0";
 
 // Callback Declarations
@@ -78,9 +77,34 @@ void Game::initObjects()
     0.f, 0.5f, 0.f
   };
 
+  this->vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(this->vertexShader, 1, &vertexShaderSource, NULL);
+  glCompileShader(this->vertexShader);
+
+  this->fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(this->fragmentShader, 1, &fragmentShaderSource, NULL);
+  glCompileShader(this->fragmentShader);
+
   glGenBuffers(1, &this->VBO);
   glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  glGenVertexArrays(1, &this->VAO);
+  glBindVertexArray(this->VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  this->shaderProgram = glCreateProgram();
+  glAttachShader(shaderProgram, this->vertexShader);
+  glAttachShader(shaderProgram, this->fragmentShader);
+  glLinkProgram(this->shaderProgram);
+
+  glUseProgram(this->shaderProgram);
+  glDeleteShader(this->vertexShader);
+  glDeleteShader(this->fragmentShader);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  glEnableVertexAttribArray(0);
 }
 
 // Construtor and Destructor
@@ -103,6 +127,11 @@ void Game::render()
 {
   glClearColor(0.2f, 0.3f, 0.4f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT);
+
+  glUseProgram(this->shaderProgram);
+  glBindVertexArray(this->VAO);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+
   glfwSwapBuffers(this->window);
 }
 
