@@ -8,10 +8,17 @@ class Game
   private:
     GLFWwindow* window;
 
+    // Initializers
+    void initWindow();
+
   public:
     // Constructor and Destructor
     Game();
     virtual ~Game();
+
+    // Functions
+    void render();
+    void run();
 };
 
 #endif // GAME_H
