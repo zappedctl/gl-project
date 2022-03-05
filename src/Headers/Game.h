@@ -8,9 +8,12 @@ class Game
   private:
     GLFWwindow* window;
 
+    unsigned int VBO;
+
     // Initializers
     void initWindow();
     void initCallbacks();
+    void initObjects();
 
   public:
     // Constructor and Destructor

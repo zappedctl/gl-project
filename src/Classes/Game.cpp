@@ -1,6 +1,25 @@
 #include "../Headers/Game.h"
 #include "../Constants.h"
 
+// Shaders
+
+const char* vertexShaderSource =
+  "#version 330 core\n"
+  "layout (location = 0) in vec3 aPos;\n"
+  "void main()\n"
+  "{\n"
+  " gl_Position = vec3(aPos.x, aPos.y, aPos.z, 1.0f);\n"
+  "}\0";
+
+const char* fragmentShaderSource =
+  "#version 330 core\n"
+  "layout (location = 0) in vec3 aPos;\n"
+  "out vec4 fColor;\n"
+  "void main()\n"
+  "{\n"
+  " fColor = vec4(1.f, 0.f, 0.f, 1,0f);\n"
+  "}\0";
+
 // Callback Declarations
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -51,12 +70,26 @@ void Game::initCallbacks()
   glfwSetCursorPosCallback(this->window, cursorPosCallback);
 }
 
-// Constructor and Destructor
+void Game::initObjects()
+{
+  float vertices[] = {
+    -0.5f, -0.5f, 0.f,
+    0.5f, -0.5f, 0.f,
+    0.f, 0.5f, 0.f
+  };
+
+  glGenBuffers(1, &this->VBO);
+  glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+}
+
+// Construtor and Destructor
 
 Game::Game()
 {
   this->initWindow();
   this->initCallbacks();
+  this->initObjects();
 }
 
 Game::~Game()
@@ -68,7 +101,7 @@ Game::~Game()
 
 void Game::render()
 {
-  glClearColor(.2f, .3f, .4f, 1.f);
+  glClearColor(0.2f, 0.3f, 0.4f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT);
   glfwSwapBuffers(this->window);
 }
