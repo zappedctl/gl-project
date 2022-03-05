@@ -3,6 +3,9 @@
 
 #include "../Headers.h"
 #include "Shader.h"
+#include "VAO.h"
+#include "VBO.h"
+#include "EBO.h"
 
 class Game
 {
@@ -12,9 +15,9 @@ class Game
     Shader* mainShader;
 
     // OpenGL Objects
-    unsigned int VBO;
-    unsigned int EBO;
-    unsigned int VAO;
+    VAO* VAO1;
+    VBO* VBO1;
+    EBO* EBO1;
 
     // Initializers
     void initWindow();

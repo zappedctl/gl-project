@@ -74,23 +74,17 @@ void Game::initObjects()
     1, 2, 3
   };
 
+  this->VAO1 = new VAO();
+  VAO1->Bind();
 
-  glGenVertexArrays(1, &this->VAO);
-  glGenBuffers(1, &this->VBO);
-  glGenBuffers(1, &this->EBO);
+  this->VBO1 = new VBO(vertices, sizeof(vertices));
+  this->EBO1 = new EBO(indices, sizeof(indices));
 
-  glBindVertexArray(this->VAO);
-  glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  VAO1->LinkVBO(*VBO1, 0);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(0);
-
-  // Unbinding
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  VAO1->Unbind();
+  VBO1->Unbind();
+  EBO1->Unbind();
 }
 
 // Construtor and Destructor
@@ -105,8 +99,14 @@ Game::Game()
 
 Game::~Game()
 {
+  VAO1->Delete();
+  VBO1->Delete();
+  EBO1->Delete();
   this->mainShader->Delete();
   
+  delete this->VAO1;
+  delete this->VBO1;
+  delete this->EBO1;
   delete this->mainShader;
 }
 
@@ -118,7 +118,7 @@ void Game::render()
   glClear(GL_COLOR_BUFFER_BIT);
 
   this->mainShader->Activate();
-  glBindVertexArray(this->VAO);
+  VAO1->Bind();
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
   glfwSwapBuffers(this->window);
