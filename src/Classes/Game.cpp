@@ -21,6 +21,7 @@ const char* fragmentShaderSource =
 
 // Callback Declarations
 
+void windowSizeCallback(GLFWwindow* window, int width, int height);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void cursorPosCallback(GLFWwindow* window, double xPos, double yPos);
 
@@ -61,10 +62,13 @@ void Game::initWindow()
     std::cout << "Failed to initialize GLEW." << std::endl;
     glfwTerminate();
   }
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void Game::initCallbacks()
 {
+  glfwSetWindowSizeCallback(this->window, windowSizeCallback);
   glfwSetKeyCallback(this->window, keyCallback);
   glfwSetCursorPosCallback(this->window, cursorPosCallback);
 }
@@ -145,6 +149,12 @@ void Game::run()
 }
 
 // Callback Definitions
+
+
+void windowSizeCallback(GLFWwindow* window, int width, int height)
+{
+  glViewport(0, 0, width, height);
+}
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
