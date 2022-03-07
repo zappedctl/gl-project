@@ -45,7 +45,7 @@ void Game::initWindow()
     glfwTerminate();
   }
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void Game::initCallbacks()
@@ -63,10 +63,10 @@ void Game::initShaders()
 void Game::initObjects()
 {
   float vertices[] = {
-    -0.5f, 0.5f, 0.f,  // Top Left
-    0.5f, 0.5f, 0.f,   // Top Right
-    -0.5f, -0.5f, 0.f, // Bottom Left
-    0.5f, -0.5f, 0.f   // Bottom Right
+    -0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f,  // Top Left
+    0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f,   // Top Right
+    -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, // Bottom Left
+    0.5f, -0.5f, 0.f, 1.f, 1.f, 0.f   // Bottom Right
   };
 
   unsigned int indices[] = {
@@ -80,11 +80,12 @@ void Game::initObjects()
   this->VBO1 = new VBO(vertices, sizeof(vertices));
   this->EBO1 = new EBO(indices, sizeof(indices));
 
-  VAO1->LinkVBO(*VBO1, 0);
+  this->VAO1->LinkAttrib(*this->VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+  this->VAO1->LinkAttrib(*this->VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 
-  VAO1->Unbind();
-  VBO1->Unbind();
-  EBO1->Unbind();
+  this->VAO1->Unbind();
+  this->VBO1->Unbind();
+  this->EBO1->Unbind();
 }
 
 // Construtor and Destructor
