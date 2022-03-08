@@ -95,7 +95,7 @@ void Game::initObjects()
   // Binding Texture
   this->textureID = LoadTexture2D("src/Assets/Textures/sus.png");
   this->mainShader->Activate();
-  glUniform1i(glGetUniformLocation(this->mainShader->ID, "saampTexture"), 0);
+  glUniform1i(glGetUniformLocation(this->mainShader->ID, "sampTexture"), 0);
 }
 
 // Construtor and Destructor
@@ -198,7 +198,7 @@ const GLuint LoadTexture2D(const char* path)
   // Error Checking
   if (data)
   {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
   }
   else {
