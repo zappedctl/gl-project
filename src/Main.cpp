@@ -1,3 +1,6 @@
+// STB
+#define STB_IMAGE_IMPLEMENTATION
+
 #include "Headers//Game.h"
 
 int main()

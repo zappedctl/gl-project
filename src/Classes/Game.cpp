@@ -7,6 +7,10 @@ void windowSizeCallback(GLFWwindow* window, int width, int height);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void cursorPosCallback(GLFWwindow* window, double xPos, double yPos);
 
+// Functions
+
+const GLuint LoadTexture2D(const char* path);
+
 // Initializers
 
 void Game::initWindow()
@@ -63,10 +67,11 @@ void Game::initShaders()
 void Game::initObjects()
 {
   float vertices[] = {
-    -0.5f, 0.5f, 0.f, 1.f, 0.f, 0.f,  // Top Left
-    0.5f, 0.5f, 0.f, 0.f, 1.f, 0.f,   // Top Right
-    -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, // Bottom Left
-    0.5f, -0.5f, 0.f, 1.f, 1.f, 0.f   // Bottom Right
+    // Positions        // Texture Coords
+    -0.5f,  0.5f, 0.f,  0.f, 1.f, // Top Left
+     0.5f,  0.5f, 0.f,  1.f, 1.f, // Top Right
+    -0.5f, -0.5f, 0.f,  0.f, 0.f, // Bottom Left
+     0.5f, -0.5f, 0.f,  1.f, 0.f  // Bottom Right
   };
 
   unsigned int indices[] = {
@@ -80,12 +85,17 @@ void Game::initObjects()
   this->VBO1 = new VBO(vertices, sizeof(vertices));
   this->EBO1 = new EBO(indices, sizeof(indices));
 
-  this->VAO1->LinkAttrib(*this->VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
-  this->VAO1->LinkAttrib(*this->VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+  this->VAO1->LinkAttrib(*this->VBO1, 0, 3, GL_FLOAT, 5 * sizeof(float), (void*)0);
+  this->VAO1->LinkAttrib(*this->VBO1, 1, 2, GL_FLOAT, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
   this->VAO1->Unbind();
   this->VBO1->Unbind();
   this->EBO1->Unbind();
+
+  // Binding Texture
+  this->textureID = LoadTexture2D("src/Assets/Textures/sus.png");
+  this->mainShader->Activate();
+  glUniform1i(glGetUniformLocation(this->mainShader->ID, "saampTexture"), 0);
 }
 
 // Construtor and Destructor
@@ -115,13 +125,26 @@ Game::~Game()
 
 void Game::render()
 {
+  // Clearing the Window
   glClearColor(0.2f, 0.3f, 0.4f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  // Binding Texture
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, this->textureID);
+
+  // Binding VAO
   this->mainShader->Activate();
   VAO1->Bind();
+
+  // Drawing Triangles
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+  // Unbinding
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindVertexArray(0);
+
+  // Swapping Buffers
   glfwSwapBuffers(this->window);
 }
 
@@ -129,13 +152,12 @@ void Game::run()
 {
   while (!glfwWindowShouldClose(this->window))
   {
-    this->render();
     glfwPollEvents();
+    this->render();
   }
 }
 
 // Callback Definitions
-
 
 void windowSizeCallback(GLFWwindow* window, int width, int height)
 {
@@ -150,4 +172,42 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void cursorPosCallback(GLFWwindow* window, double xPos, double yPos)
 {
 
+}
+
+// Functions
+
+const GLuint LoadTexture2D(const char* path)
+{
+  // Creating Texture
+  GLuint textureID;
+  glGenTextures(1, &textureID);
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  
+  // Texture Parameters
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+  // Texture Filtering
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  // Loading Texture from a File
+  int width, height, channels;
+  unsigned char* data = stbi_load(path, &width, &height, &channels, 0);
+
+  // Error Checking
+  if (data)
+  {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  else {
+    std::cout << "ERROR::GAME::CANT_LOAD_TEXTURE" << std::endl;
+  }
+
+  // Unbinding
+  glBindTexture(GL_TEXTURE_2D, 0);
+  stbi_image_free(data);
+
+  return textureID;
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_NAME="gl"
-LIBRARIES="-lGL -lGLU -lglfw -lGLEW -lX11 -lXxf86vm -lXrandr -lpthread -lXi"
+LIBRARIES="-lGL -lGLU -lglfw -lGLEW -L/usr/include/stb -lX11 -lXxf86vm -lXrandr -lpthread -lXi"
 
 if [[ $1 == "comp" ]]
 then

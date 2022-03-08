@@ -13,6 +13,7 @@ class Game
     GLFWwindow* window;
 
     Shader* mainShader;
+    GLuint textureID;
 
     // OpenGL Objects
     VAO* VAO1;

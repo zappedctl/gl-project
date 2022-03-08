@@ -7,8 +7,8 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
-// SOIL
-#include <SOIL/SOIL.h>
+// STB
+#include <stb/stb_image.h>
 
 // Other
 #include <string>
@@ -16,5 +16,6 @@
 #include <sstream>
 #include <iostream>
 #include <cerrno>
+#include <cassert>
 
 #endif // HEADERS_H
