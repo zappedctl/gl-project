@@ -10,6 +10,9 @@
 // STB
 #include <stb/stb_image.h>
 
+// GLM
+#include <glm/ext.hpp>
+
 // Other
 #include <string>
 #include <fstream>

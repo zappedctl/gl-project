@@ -68,10 +68,10 @@ void Game::initObjects()
 {
   float vertices[] = {
     // Positions        // Texture Coords
-    -0.5f,  0.5f, 0.f,  0.f, 1.f, // Top Left
-     0.5f,  0.5f, 0.f,  1.f, 1.f, // Top Right
-    -0.5f, -0.5f, 0.f,  0.f, 0.f, // Bottom Left
-     0.5f, -0.5f, 0.f,  1.f, 0.f  // Bottom Right
+    -0.5f,  0.5f, 0.f,  0.f, 0.f, // Top Left
+     0.5f,  0.5f, 0.f,  1.f, 0.f, // Top Right
+    -0.5f, -0.5f, 0.f,  0.f, 1.f, // Bottom Left
+     0.5f, -0.5f, 0.f,  1.f, 1.f  // Bottom Right
   };
 
   unsigned int indices[] = {
@@ -136,6 +136,15 @@ void Game::render()
   // Binding VAO
   this->mainShader->Activate();
   VAO1->Bind();
+
+  // Handling Movement
+  glm::mat4 modelMatrix(1.f);
+  glm::mat4 viewMat(1.f);
+
+  viewMat = glm::translate(viewMat, glm::vec3(0.f, 1.f, 0));  
+
+  glUniformMatrix4fv(glGetUniformLocation(this->mainShader->ID, "mTransform"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+  glUniformMatrix4fv(glGetUniformLocation(this->mainShader->ID, "vTransform"), 1, GL_FALSE, glm::value_ptr(viewMat));
 
   // Drawing Triangles
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
