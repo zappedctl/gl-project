@@ -1,6 +1,9 @@
 #include "../Headers/Game.h"
 #include "../Constants.h"
 
+float playerX = 0.f;
+float playerY = 0.f;
+
 // Callback Declarations
 
 void windowSizeCallback(GLFWwindow* window, int width, int height);
@@ -141,7 +144,7 @@ void Game::render()
   glm::mat4 modelMatrix(1.f);
   glm::mat4 viewMat(1.f);
 
-  viewMat = glm::translate(viewMat, glm::vec3(0.f, 1.f, 0));  
+  viewMat = glm::translate(viewMat, glm::vec3(playerX, playerY, 0));  
 
   glUniformMatrix4fv(glGetUniformLocation(this->mainShader->ID, "mTransform"), 1, GL_FALSE, glm::value_ptr(modelMatrix));
   glUniformMatrix4fv(glGetUniformLocation(this->mainShader->ID, "vTransform"), 1, GL_FALSE, glm::value_ptr(viewMat));
@@ -175,7 +178,10 @@ void windowSizeCallback(GLFWwindow* window, int width, int height)
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-
+  if (key == GLFW_KEY_W) playerY -= 0.1f;
+  else if (key == GLFW_KEY_S) playerY += 0.1f;
+  else if (key == GLFW_KEY_A) playerX += 0.1f;
+  else if (key == GLFW_KEY_D) playerX -= 0.1f;
 }
 
 void cursorPosCallback(GLFWwindow* window, double xPos, double yPos)

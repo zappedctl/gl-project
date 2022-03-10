@@ -14,10 +14,6 @@ class Game
     GLFWwindow* window;
     Shader* mainShader;
     GLuint textureID;
-    
-    // Player Position
-    float playerX;
-    float playerY;
 
     // OpenGL Objects
     VAO* VAO1;
